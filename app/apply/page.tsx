@@ -1,13 +1,43 @@
 "use client";
 
 import { useState } from "react";
+import { supabase } from "../lib/supabase";
 
 export default function ApplyPage() {
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setSubmitted(true);
+    setSubmitting(true);
+    setError("");
+
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+
+    const { error: dbError } = await supabase.from("applications").insert({
+      first_name: formData.get("first_name"),
+      last_name: formData.get("last_name"),
+      email: formData.get("email"),
+      linkedin: formData.get("linkedin") || null,
+      job_title: formData.get("job_title"),
+      company: formData.get("company"),
+      industry: formData.get("industry"),
+      company_size: formData.get("company_size"),
+      challenge: formData.get("challenge"),
+      hopes: formData.get("hopes") || null,
+      referral_source: formData.get("referral_source") || null,
+    });
+
+    setSubmitting(false);
+
+    if (dbError) {
+      setError("Something went wrong. Please try again.");
+      console.error(dbError);
+    } else {
+      setSubmitted(true);
+    }
   };
 
   return (
@@ -43,36 +73,36 @@ export default function ApplyPage() {
             <div className="form-row">
               <div className="form-group">
                 <label className="form-label">First name <span className="required">*</span></label>
-                <input className="form-input" type="text" required placeholder="Jane" />
+                <input className="form-input" name="first_name" type="text" required placeholder="Jane" />
               </div>
               <div className="form-group">
                 <label className="form-label">Last name <span className="required">*</span></label>
-                <input className="form-input" type="text" required placeholder="Chen" />
+                <input className="form-input" name="last_name" type="text" required placeholder="Chen" />
               </div>
             </div>
             <div className="form-group">
               <label className="form-label">Work email <span className="required">*</span></label>
-              <input className="form-input" type="email" required placeholder="jane@company.com" />
+              <input className="form-input" name="email" type="email" required placeholder="jane@company.com" />
             </div>
             <div className="form-group">
               <label className="form-label">LinkedIn profile</label>
-              <input className="form-input" type="url" placeholder="https://linkedin.com/in/..." />
+              <input className="form-input" name="linkedin" type="url" placeholder="https://linkedin.com/in/..." />
             </div>
 
             <div className="form-divider" />
             <div className="form-section-label">Your role</div>
             <div className="form-group">
               <label className="form-label">Job title <span className="required">*</span></label>
-              <input className="form-input" type="text" required placeholder="VP of Digital, CIO, Director of IT..." />
+              <input className="form-input" name="job_title" type="text" required placeholder="VP of Digital, CIO, Director of IT..." />
             </div>
             <div className="form-group">
               <label className="form-label">Company <span className="required">*</span></label>
-              <input className="form-input" type="text" required placeholder="Acme Manufacturing" />
+              <input className="form-input" name="company" type="text" required placeholder="Acme Manufacturing" />
             </div>
             <div className="form-row">
               <div className="form-group">
                 <label className="form-label">Industry segment <span className="required">*</span></label>
-                <select className="form-input select" required defaultValue="">
+                <select className="form-input select" name="industry" required defaultValue="">
                   <option value="" disabled>Select...</option>
                   <option>Aerospace &amp; Defense</option>
                   <option>Automotive</option>
@@ -86,7 +116,7 @@ export default function ApplyPage() {
               </div>
               <div className="form-group">
                 <label className="form-label">Company size <span className="required">*</span></label>
-                <select className="form-input select" required defaultValue="">
+                <select className="form-input select" name="company_size" required defaultValue="">
                   <option value="" disabled>Select...</option>
                   <option>50–200</option>
                   <option>200–1,000</option>
@@ -105,6 +135,7 @@ export default function ApplyPage() {
               </label>
               <textarea
                 className="form-input textarea"
+                name="challenge"
                 required
                 placeholder="E.g., We're migrating from on-prem PLM to cloud and struggling with change management across 12 sites..."
               />
@@ -113,12 +144,13 @@ export default function ApplyPage() {
               <label className="form-label">What do you hope to get from this community?</label>
               <textarea
                 className="form-input textarea"
+                name="hopes"
                 placeholder="E.g., Honest reviews of ERP platforms from peers who've actually implemented them..."
               />
             </div>
             <div className="form-group">
               <label className="form-label">How did you hear about Digitally Born?</label>
-              <select className="form-input select" defaultValue="">
+              <select className="form-input select" name="referral_source" defaultValue="">
                 <option value="" disabled>Select...</option>
                 <option>Peer referral</option>
                 <option>LinkedIn</option>
@@ -128,11 +160,17 @@ export default function ApplyPage() {
               </select>
             </div>
 
+            {error && (
+              <p style={{ color: "#C45D5D", fontSize: "0.85rem", marginBottom: 16 }}>{error}</p>
+            )}
+
             <div className="form-submit-row">
               <span className="form-note">
                 Your information is kept confidential and is never shared with third parties.
               </span>
-              <button type="submit" className="btn btn-accent">Submit application</button>
+              <button type="submit" className="btn btn-accent" disabled={submitting}>
+                {submitting ? "Submitting..." : "Submit application"}
+              </button>
             </div>
           </form>
         ) : (
@@ -149,3 +187,4 @@ export default function ApplyPage() {
     </div>
   );
 }
+
