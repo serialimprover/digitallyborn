@@ -1,0 +1,164 @@
+"use server";
+
+import { revalidatePath } from "next/cache";
+import { createAdminClient } from "@/app/lib/supabase-admin";
+import { createSupabaseServerClient } from "@/app/lib/supabase-server";
+
+async function requireAdmin() {
+  const supabase = await createSupabaseServerClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user?.email) throw new Error("Unauthorized");
+
+  const adminClient = createAdminClient();
+  const { data: admin } = await adminClient
+    .from("admins")
+    .select("email")
+    .eq("email", user.email)
+    .single();
+
+  if (!admin) throw new Error("Unauthorized");
+  return adminClient;
+}
+
+// ── Applications ────────────────────────────────────────────────────────────
+
+export async function approveApplication(id: string) {
+  const db = await requireAdmin();
+
+  // Fetch application details
+  const { data: app, error: fetchError } = await db
+    .from("applications")
+    .select("email, first_name, last_name, company, job_title")
+    .eq("id", id)
+    .single();
+
+  if (fetchError || !app) throw new Error("Application not found");
+
+  // Mark application approved
+  const { error: updateError } = await db
+    .from("applications")
+    .update({ status: "approved", reviewed_at: new Date().toISOString() })
+    .eq("id", id);
+
+  if (updateError) throw updateError;
+
+  // Add to approved_members (upsert so re-approving is safe)
+  const { error: memberError } = await db
+    .from("approved_members")
+    .upsert({
+      email: app.email,
+      first_name: app.first_name,
+      last_name: app.last_name,
+      company: app.company,
+      job_title: app.job_title,
+      status: "active",
+      joined_at: new Date().toISOString(),
+    }, { onConflict: "email" });
+
+  if (memberError) throw memberError;
+
+  revalidatePath("/admin/applications");
+  revalidatePath(`/admin/applications/${id}`);
+  revalidatePath("/admin/members");
+  revalidatePath("/admin");
+}
+
+export async function rejectApplication(id: string, notes?: string) {
+  const db = await requireAdmin();
+
+  const { error } = await db
+    .from("applications")
+    .update({
+      status: "rejected",
+      reviewed_at: new Date().toISOString(),
+      admin_notes: notes ?? null,
+    })
+    .eq("id", id);
+
+  if (error) throw error;
+
+  revalidatePath("/admin/applications");
+  revalidatePath(`/admin/applications/${id}`);
+  revalidatePath("/admin");
+}
+
+export async function saveApplicationNotes(id: string, notes: string) {
+  const db = await requireAdmin();
+
+  const { error } = await db
+    .from("applications")
+    .update({ admin_notes: notes })
+    .eq("id", id);
+
+  if (error) throw error;
+
+  revalidatePath(`/admin/applications/${id}`);
+}
+
+// ── Members ──────────────────────────────────────────────────────────────────
+
+export async function suspendMember(email: string, reason: string) {
+  const db = await requireAdmin();
+
+  const { error } = await db
+    .from("approved_members")
+    .update({
+      status: "suspended",
+      suspension_reason: reason,
+    })
+    .eq("email", email);
+
+  if (error) throw error;
+
+  revalidatePath("/admin/members");
+  revalidatePath("/admin");
+}
+
+export async function cancelMember(email: string) {
+  const db = await requireAdmin();
+
+  const { error } = await db
+    .from("approved_members")
+    .update({ status: "cancelled", suspension_reason: null })
+    .eq("email", email);
+
+  if (error) throw error;
+
+  revalidatePath("/admin/members");
+  revalidatePath("/admin");
+}
+
+export async function reinstateMember(email: string) {
+  const db = await requireAdmin();
+
+  const { error } = await db
+    .from("approved_members")
+    .update({ status: "active", suspension_reason: null })
+    .eq("email", email);
+
+  if (error) throw error;
+
+  revalidatePath("/admin/members");
+  revalidatePath("/admin");
+}
+
+export async function editMember(
+  email: string,
+  data: {
+    first_name?: string;
+    last_name?: string;
+    company?: string;
+    job_title?: string;
+  }
+) {
+  const db = await requireAdmin();
+
+  const { error } = await db
+    .from("approved_members")
+    .update(data)
+    .eq("email", email);
+
+  if (error) throw error;
+
+  revalidatePath("/admin/members");
+}

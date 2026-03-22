@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls:*)",
+      "Bash(grep -E \"\\\\.\\(ts|tsx\\)$\")",
+      "Bash(grep -r \"auth\\\\|Auth\\\\|AUTH\\\\|login\\\\|Login\\\\|middleware\" /c/Users/cyril/Documents/digitally-born/app --include=*.ts --include=*.tsx --include=*.js --include=*.jsx)",
+      "Bash(find /c/Users/cyril/Documents/digitally-born -maxdepth 3 -not -path */node_modules/* -not -path */.next/* -not -path */.git/*)",
+      "Bash(npm install:*)",
+      "Bash(find /c/Users/cyril/Documents/digitally-born -type f \\\\\\(-name *migration* -o -name *schema* -o -name *.sql \\\\\\))",
+      "Bash(npm list:*)",
+      "Bash(npm run:*)",
+      "Bash(ls \"/c/Users/cyril/Documents/digitally-born/app/\\(site\\)\")"
+    ]
+  }
+}

@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { createBrowserClient } from "@supabase/ssr";
+import { useRouter } from "next/navigation";
 
 const RESOURCES = [
   { tag: "Guide", tagClass: "tag-guide", title: "PLM Migration Playbook: Lessons from 14 Manufacturing CIOs", desc: "A candid compilation of what worked, what didn't, and what everyone wishes they'd known before migrating product lifecycle management systems.", meta: "PDF · 28 pages", date: "Updated Mar 2026" },
@@ -21,6 +23,17 @@ const EVENTS = [
 
 export default function MembersPage() {
   const [tab, setTab] = useState<"resources" | "events">("resources");
+  const router = useRouter();
+
+  const supabase = createBrowserClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  );
+
+  const handleSignOut = async () => {
+    await supabase.auth.signOut();
+    router.push("/login");
+  };
 
   return (
     <div className="members-page">
@@ -29,6 +42,9 @@ export default function MembersPage() {
           <h1>Member Hub</h1>
           <p>Resources, recordings, and upcoming events — exclusively for Digitally Born members.</p>
         </div>
+        <button onClick={handleSignOut} className="btn btn-ghost" style={{ fontSize: "0.8rem", padding: "8px 18px" }}>
+          Sign out
+        </button>
         <div className="tab-bar">
           <button className={`tab ${tab === "resources" ? "active" : ""}`} onClick={() => setTab("resources")}>
             Resources
