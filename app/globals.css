@@ -1174,6 +1174,52 @@ button { cursor: pointer; }
   margin: 0 0 16px;
 }
 
+.calendar-detail-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.add-to-calendar {
+  position: relative;
+}
+
+.add-to-calendar-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  z-index: 10;
+  min-width: 200px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+}
+
+.calendar-menu-item {
+  display: block;
+  width: 100%;
+  padding: 10px 16px;
+  font-size: 0.82rem;
+  color: var(--text-primary);
+  text-decoration: none;
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  transition: background var(--transition);
+}
+.calendar-menu-item:hover { background: var(--bg-tertiary); }
+.calendar-menu-item + .calendar-menu-item { border-top: 1px solid var(--border); }
+
+.calendar-event-pill-rsvped {
+  background: var(--bg-tertiary);
+  color: var(--accent);
+  outline: 1px solid var(--accent);
+}
+
 /* Tab count badge */
 .tab-count {
   display: inline-flex;

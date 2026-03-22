@@ -15,6 +15,7 @@ interface Event {
   type: string;
   location: string | null;
   link: string | null;
+  rsvp_count: number;
 }
 
 interface Props {
@@ -137,7 +138,7 @@ export default function EventsClient({ events }: Props) {
                 <th>Type</th>
                 <th>Time</th>
                 <th>Location</th>
-                <th>Link</th>
+                <th>RSVPs</th>
                 <th></th>
               </tr>
             </thead>
@@ -155,11 +156,7 @@ export default function EventsClient({ events }: Props) {
                   <td><span className="admin-badge admin-badge-pending">{ev.type}</span></td>
                   <td className="admin-table-secondary">{ev.event_time || "—"}</td>
                   <td className="admin-table-secondary">{ev.location || "—"}</td>
-                  <td>
-                    {ev.link
-                      ? <a href={ev.link} target="_blank" rel="noopener noreferrer" className="admin-table-action">View →</a>
-                      : <span className="admin-table-secondary">—</span>}
-                  </td>
+                  <td className="admin-table-secondary">{ev.rsvp_count > 0 ? ev.rsvp_count : "—"}</td>
                   <td>
                     <div className="admin-member-actions">
                       <button onClick={() => openEdit(ev)} className="admin-table-action">Edit</button>
