@@ -107,18 +107,21 @@ button { cursor: pointer; }
   gap: 10px;
 }
 
-.nav-mark {
-  width: 28px; height: 28px;
-  border: 2px solid var(--accent);
-  border-radius: 6px;
+.nav-logo-wrap {
+  width: 36px; height: 36px;
+  border-radius: 8px;
+  overflow: hidden;
+  flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
-  font-weight: 500;
-  color: var(--accent);
-  letter-spacing: -0.05em;
+}
+
+.nav-logo {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+  display: block;
 }
 
 .nav-name {
