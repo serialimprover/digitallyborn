@@ -1,19 +1,18 @@
 import { createAdminClient } from "@/app/lib/supabase-admin";
-import MembersShell from "./MembersShell";
+import EventsClient from "./EventsClient";
 
 async function getEvents() {
   const db = createAdminClient();
   const { data } = await db
     .from("events")
     .select("*")
-    .gte("event_date", new Date().toISOString().split("T")[0])
     .order("event_date", { ascending: true });
   return data ?? [];
 }
 
 export const dynamic = "force-dynamic";
 
-export default async function MembersPage() {
+export default async function AdminEventsPage() {
   const events = await getEvents();
-  return <MembersShell events={events} />;
+  return <EventsClient events={events} />;
 }

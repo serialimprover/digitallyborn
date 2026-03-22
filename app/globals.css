@@ -970,6 +970,91 @@ button { cursor: pointer; }
   margin-top: 8px;
 }
 
+/* ═══ SLACK BANNER ═══ */
+.slack-banner {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 20px 24px;
+  margin-bottom: 32px;
+  text-decoration: none;
+  transition: border-color var(--transition), transform var(--transition);
+}
+
+.slack-banner:hover {
+  border-color: var(--border);
+  transform: translateY(-2px);
+}
+
+.slack-banner-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: rgba(74, 21, 75, 0.2);
+  border: 1px solid rgba(74, 21, 75, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #E01E5A;
+  flex-shrink: 0;
+}
+
+.slack-banner-text { flex: 1; }
+
+.slack-banner-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.slack-banner-sub {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  line-height: 1.45;
+}
+
+.slack-banner-arrow {
+  font-size: 1.1rem;
+  color: var(--text-tertiary);
+  flex-shrink: 0;
+  transition: transform var(--transition);
+}
+
+.slack-banner:hover .slack-banner-arrow { transform: translateX(4px); }
+
+/* Tab count badge */
+.tab-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  background: var(--accent);
+  color: var(--bg-primary);
+  border-radius: 100px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  margin-left: 5px;
+}
+
+.tab.active .tab-count {
+  background: var(--bg-primary);
+  color: var(--accent);
+}
+
+/* Events empty state */
+.events-empty {
+  padding: 60px 0;
+  text-align: center;
+  color: var(--text-tertiary);
+  font-size: 0.9rem;
+}
+
 /* ═══ ADMIN ═══ */
 /* Full-screen overlay — sits on top of the root Nav/Footer */
 .admin-overlay {

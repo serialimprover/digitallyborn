@@ -162,3 +162,64 @@ export async function editMember(
 
   revalidatePath("/admin/members");
 }
+
+// ── Events ───────────────────────────────────────────────────────────────────
+
+export interface EventData {
+  title: string;
+  description?: string;
+  event_date: string;
+  event_time?: string;
+  type: string;
+  location?: string;
+  link?: string;
+}
+
+export async function createEvent(data: EventData) {
+  const db = await requireAdmin();
+
+  const { error } = await db.from("events").insert({
+    title: data.title,
+    description: data.description || null,
+    event_date: data.event_date,
+    event_time: data.event_time || null,
+    type: data.type,
+    location: data.location || null,
+    link: data.link || null,
+  });
+
+  if (error) throw error;
+
+  revalidatePath("/admin/events");
+  revalidatePath("/members");
+}
+
+export async function updateEvent(id: string, data: EventData) {
+  const db = await requireAdmin();
+
+  const { error } = await db.from("events").update({
+    title: data.title,
+    description: data.description || null,
+    event_date: data.event_date,
+    event_time: data.event_time || null,
+    type: data.type,
+    location: data.location || null,
+    link: data.link || null,
+  }).eq("id", id);
+
+  if (error) throw error;
+
+  revalidatePath("/admin/events");
+  revalidatePath("/members");
+}
+
+export async function deleteEvent(id: string) {
+  const db = await requireAdmin();
+
+  const { error } = await db.from("events").delete().eq("id", id);
+
+  if (error) throw error;
+
+  revalidatePath("/admin/events");
+  revalidatePath("/members");
+}
