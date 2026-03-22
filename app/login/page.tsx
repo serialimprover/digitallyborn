@@ -4,6 +4,14 @@ import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { createBrowserClient } from "@supabase/ssr";
 
+function CheckIcon() {
+  return (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M5 13l4 4L19 7" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
 function LoginForm() {
   const searchParams = useSearchParams();
   const [email, setEmail] = useState("");
@@ -53,12 +61,12 @@ function LoginForm() {
         <div className="login-mark">DB</div>
         <h1 className="login-title">Member sign-in</h1>
         <p className="login-desc">
-          Enter your email and we'll send you a sign-in link. No password required.
+          Enter your email and we&apos;ll send you a sign-in link. No password required.
         </p>
 
         {submitted ? (
           <div className="login-success">
-            <div className="login-success-icon">✓</div>
+            <div className="login-success-icon"><CheckIcon /></div>
             <h2>Check your inbox</h2>
             <p>
               We sent a sign-in link to <strong>{email}</strong>. Click the link to

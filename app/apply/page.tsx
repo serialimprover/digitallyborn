@@ -3,6 +3,26 @@
 import { useState } from "react";
 import { submitApplication } from "./actions";
 
+function CheckIcon() {
+  return (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M5 13l4 4L19 7" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function ArrowRight() {
+  return (
+    <svg width="13" height="13" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+      <path d="M3.5 8H12.5M12.5 8L8.5 4M12.5 8L8.5 12" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function Spinner() {
+  return <span className="spinner" aria-hidden="true" />;
+}
+
 export default function ApplyPage() {
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
@@ -59,7 +79,7 @@ export default function ApplyPage() {
             "Members are expected to participate, not just observe",
             "All discussions operate under Chatham House Rule",
           ].map((t) => (
-            <li key={t}><span className="arrow">→</span>{t}</li>
+            <li key={t}><span className="arrow"><ArrowRight /></span>{t}</li>
           ))}
         </ul>
       </div>
@@ -159,7 +179,7 @@ export default function ApplyPage() {
             </div>
 
             {error && (
-              <p style={{ color: "#C45D5D", fontSize: "0.85rem", marginBottom: 16 }}>{error}</p>
+              <p style={{ color: "var(--error)", fontSize: "0.85rem", marginBottom: 16 }}>{error}</p>
             )}
 
             <div className="form-submit-row">
@@ -167,13 +187,13 @@ export default function ApplyPage() {
                 Your information is kept confidential and is never shared with third parties.
               </span>
               <button type="submit" className="btn btn-accent" disabled={submitting}>
-                {submitting ? "Submitting..." : "Submit application"}
+                {submitting ? <><Spinner />Submitting…</> : "Submit application"}
               </button>
             </div>
           </form>
         ) : (
           <div className="form-success">
-            <div className="success-icon">✓</div>
+            <div className="success-icon"><CheckIcon /></div>
             <h3>Application received</h3>
             <p>
               Thank you for your interest in Digitally Born. Our review team will evaluate

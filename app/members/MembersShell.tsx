@@ -24,6 +24,46 @@ interface Props {
 const DAY_NAMES = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 const MONTH_NAMES = ["January","February","March","April","May","June","July","August","September","October","November","December"];
 
+function IconChevLeft() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+      <path d="M10 3L5 8l5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function IconChevRight() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+      <path d="M6 3l5 5-5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function IconChevDown() {
+  return (
+    <svg width="11" height="11" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+      <path d="M2 4l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function IconClose() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+      <path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function IconArrow() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+      <path d="M3.5 8H12.5M12.5 8L8.5 4M12.5 8L8.5 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
 function buildGoogleCalendarUrl(ev: Event) {
   const d = new Date(ev.event_date + "T12:00:00");
   const pad = (n: number) => String(n).padStart(2, "0");
@@ -116,7 +156,9 @@ function EventDetail({
           <h3>{event.title}</h3>
           <span className="event-type">{event.type}</span>
         </div>
-        <button className="calendar-detail-close" onClick={onClose}>✕</button>
+        <button className="calendar-detail-close" onClick={onClose} aria-label="Close">
+          <IconClose />
+        </button>
       </div>
       <div className="calendar-detail-meta">
         {dateLabel}{meta ? ` · ${meta}` : ""}
@@ -135,11 +177,11 @@ function EventDetail({
 
         <div className="add-to-calendar">
           <button
-            className="btn btn-ghost"
+            className="btn btn-ghost add-to-cal-btn"
             style={{ fontSize: "0.82rem", padding: "8px 16px" }}
             onClick={() => setShowCalendar(v => !v)}
           >
-            Add to calendar ▾
+            Add to calendar <IconChevDown />
           </button>
           {showCalendar && (
             <div className="add-to-calendar-menu">
@@ -202,9 +244,13 @@ function CalendarView({ events, rsvpedEventIds }: { events: Event[]; rsvpedEvent
   return (
     <div className="calendar-wrap">
       <div className="calendar-header">
-        <button className="calendar-nav" onClick={prevMonth}>‹</button>
+        <button className="calendar-nav" onClick={prevMonth} aria-label="Previous month">
+          <IconChevLeft />
+        </button>
         <span className="calendar-title">{MONTH_NAMES[month]} {year}</span>
-        <button className="calendar-nav" onClick={nextMonth}>›</button>
+        <button className="calendar-nav" onClick={nextMonth} aria-label="Next month">
+          <IconChevRight />
+        </button>
       </div>
 
       <div className="calendar-grid">
@@ -282,7 +328,7 @@ export default function MembersShell({ events, rsvpedEventIds }: Props) {
           <div className="slack-banner-title">Join the conversation on Slack</div>
           <div className="slack-banner-sub">Ask questions, share insights, and connect with fellow members between events</div>
         </div>
-        <div className="slack-banner-arrow">→</div>
+        <div className="slack-banner-arrow"><IconArrow /></div>
       </a>
 
       <CalendarView events={events} rsvpedEventIds={rsvpedEventIds} />

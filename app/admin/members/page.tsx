@@ -1,6 +1,11 @@
 import { createAdminClient } from "@/app/lib/supabase-admin";
 import MembersClient from "./MembersClient";
 
+// Strip characters that could manipulate the PostgREST filter expression.
+function sanitizeQuery(q: string): string {
+  return q.replace(/[(),%\\]/g, "").trim().slice(0, 200);
+}
+
 async function getMembers(status: string, query: string) {
   const db = createAdminClient();
   let req = db
@@ -13,8 +18,9 @@ async function getMembers(status: string, query: string) {
   }
 
   if (query) {
+    const safe = sanitizeQuery(query);
     req = req.or(
-      `first_name.ilike.%${query}%,last_name.ilike.%${query}%,email.ilike.%${query}%,company.ilike.%${query}%`
+      `first_name.ilike.%${safe}%,last_name.ilike.%${safe}%,email.ilike.%${safe}%,company.ilike.%${safe}%`
     );
   }
 
