@@ -4,15 +4,6 @@ import { useState } from "react";
 import { createBrowserClient } from "@supabase/ssr";
 import { useRouter } from "next/navigation";
 
-const RESOURCES = [
-  { tag: "Guide", tagClass: "tag-guide", title: "PLM Migration Playbook: Lessons from 14 Manufacturing CIOs", desc: "A candid compilation of what worked, what didn't, and what everyone wishes they'd known before migrating product lifecycle management systems.", meta: "PDF · 28 pages", date: "Updated Mar 2026" },
-  { tag: "Recording", tagClass: "tag-recording", title: "Roundtable: ERP Consolidation in Multi-Site Manufacturing", desc: "Six members share their experiences consolidating disparate ERP instances — including two who rolled back mid-project.", meta: "Video · 62 min", date: "Feb 2026" },
-  { tag: "Template", tagClass: "tag-template", title: "Vendor Evaluation Scorecard for Manufacturing Software", desc: "A peer-tested scoring framework for evaluating PLM, MES, QMS, and ERP vendors without the usual analyst bias.", meta: "Spreadsheet", date: "Jan 2026" },
-  { tag: "Report", tagClass: "tag-report", title: "2025 Member Survey: State of Digital in Hardware Companies", desc: "Anonymous aggregate data from 92 member responses on budgets, team sizes, platform choices, and transformation timelines.", meta: "PDF · 44 pages", date: "Dec 2025" },
-  { tag: "Recording", tagClass: "tag-recording", title: "AMA: Building a Digital Thread Without Burning Out Your Team", desc: "A candid ask-me-anything session with a VP of Engineering Systems who connected PLM to MES across three plants.", meta: "Video · 48 min", date: "Nov 2025" },
-  { tag: "Guide", tagClass: "tag-guide", title: "Negotiating Enterprise Software Contracts: What Actually Works", desc: "Crowd-sourced negotiation tactics from members who've signed 7- and 8-figure deals with major platform vendors.", meta: "PDF · 16 pages", date: "Oct 2025" },
-];
-
 interface Event {
   id: string;
   title: string;
@@ -28,18 +19,116 @@ interface Props {
   events: Event[];
 }
 
-const MONTH_NAMES = ["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"];
+const DAY_NAMES = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+const MONTH_NAMES = ["January","February","March","April","May","June","July","August","September","October","November","December"];
 
-function formatEventDate(dateStr: string) {
-  const d = new Date(dateStr + "T12:00:00"); // noon to avoid timezone flips
-  return {
-    month: MONTH_NAMES[d.getMonth()],
-    day: String(d.getDate()),
-  };
+function CalendarView({ events }: { events: Event[] }) {
+  const today = new Date();
+  const [year, setYear] = useState(today.getFullYear());
+  const [month, setMonth] = useState(today.getMonth()); // 0-indexed
+  const [selected, setSelected] = useState<Event | null>(null);
+
+  const firstDay = new Date(year, month, 1).getDay(); // 0=Sun
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+  const eventsByDate: Record<string, Event[]> = {};
+  for (const ev of events) {
+    const d = new Date(ev.event_date + "T12:00:00");
+    if (d.getFullYear() === year && d.getMonth() === month) {
+      const key = d.getDate().toString();
+      if (!eventsByDate[key]) eventsByDate[key] = [];
+      eventsByDate[key].push(ev);
+    }
+  }
+
+  function prevMonth() {
+    if (month === 0) { setMonth(11); setYear(y => y - 1); }
+    else setMonth(m => m - 1);
+    setSelected(null);
+  }
+  function nextMonth() {
+    if (month === 11) { setMonth(0); setYear(y => y + 1); }
+    else setMonth(m => m + 1);
+    setSelected(null);
+  }
+
+  const todayKey = today.getFullYear() === year && today.getMonth() === month
+    ? today.getDate().toString()
+    : null;
+
+  const cells: (number | null)[] = [
+    ...Array(firstDay).fill(null),
+    ...Array.from({ length: daysInMonth }, (_, i) => i + 1),
+  ];
+  // Pad to full weeks
+  while (cells.length % 7 !== 0) cells.push(null);
+
+  return (
+    <div className="calendar-wrap">
+      <div className="calendar-header">
+        <button className="calendar-nav" onClick={prevMonth}>‹</button>
+        <span className="calendar-title">{MONTH_NAMES[month]} {year}</span>
+        <button className="calendar-nav" onClick={nextMonth}>›</button>
+      </div>
+
+      <div className="calendar-grid">
+        {DAY_NAMES.map(d => (
+          <div key={d} className="calendar-day-name">{d}</div>
+        ))}
+        {cells.map((day, i) => {
+          if (!day) return <div key={`empty-${i}`} className="calendar-cell calendar-cell-empty" />;
+          const dayEvents = eventsByDate[day.toString()] ?? [];
+          const isToday = todayKey === day.toString();
+          return (
+            <div
+              key={day}
+              className={`calendar-cell${isToday ? " calendar-cell-today" : ""}${dayEvents.length ? " calendar-cell-has-events" : ""}`}
+            >
+              <div className="calendar-cell-num">{day}</div>
+              {dayEvents.map(ev => (
+                <button
+                  key={ev.id}
+                  className="calendar-event-pill"
+                  onClick={() => setSelected(selected?.id === ev.id ? null : ev)}
+                >
+                  {ev.title}
+                </button>
+              ))}
+            </div>
+          );
+        })}
+      </div>
+
+      {selected && (
+        <div className="calendar-detail">
+          <div className="calendar-detail-header">
+            <div>
+              <h3>{selected.title}</h3>
+              <span className="event-type">{selected.type}</span>
+            </div>
+            <button className="calendar-detail-close" onClick={() => setSelected(null)}>✕</button>
+          </div>
+          <div className="calendar-detail-meta">
+            {(() => {
+              const d = new Date(selected.event_date + "T12:00:00");
+              return `${MONTH_NAMES[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`;
+            })()}
+            {selected.event_time && ` · ${selected.event_time}`}
+            {selected.location && ` · ${selected.location}`}
+          </div>
+          {selected.description && <p className="calendar-detail-desc">{selected.description}</p>}
+          {selected.link && (
+            <a href={selected.link} target="_blank" rel="noopener noreferrer" className="btn btn-accent" style={{ fontSize: "0.82rem", padding: "8px 20px" }}>
+              RSVP →
+            </a>
+          )}
+        </div>
+      )}
+    </div>
+  );
 }
 
 export default function MembersShell({ events }: Props) {
-  const [tab, setTab] = useState<"resources" | "events">("resources");
   const router = useRouter();
 
   const supabase = createBrowserClient(
@@ -57,22 +146,14 @@ export default function MembersShell({ events }: Props) {
       <div className="members-header">
         <div>
           <h1>Member Hub</h1>
-          <p>Resources, events, and community — exclusively for Digitally Born members.</p>
+          <p>Events and community — exclusively for Digitally Born members.</p>
         </div>
         <button onClick={handleSignOut} className="btn btn-ghost" style={{ fontSize: "0.8rem", padding: "8px 18px" }}>
           Sign out
         </button>
-        <div className="tab-bar">
-          <button className={`tab ${tab === "resources" ? "active" : ""}`} onClick={() => setTab("resources")}>
-            Resources
-          </button>
-          <button className={`tab ${tab === "events" ? "active" : ""}`} onClick={() => setTab("events")}>
-            Events {events.length > 0 && <span className="tab-count">{events.length}</span>}
-          </button>
-        </div>
       </div>
 
-      {/* Slack community banner — always visible */}
+      {/* Slack community banner */}
       <a
         href="https://join.slack.com/t/digitally-born/shared_invite/zt-2pm385fxh-owGCHEvZocCjWpLGgWIGdw"
         target="_blank"
@@ -91,57 +172,7 @@ export default function MembersShell({ events }: Props) {
         <div className="slack-banner-arrow">→</div>
       </a>
 
-      {tab === "resources" && (
-        <div className="resources-grid">
-          {RESOURCES.map((r, i) => (
-            <div key={i} className="resource-card">
-              <span className={`resource-tag ${r.tagClass}`}>{r.tag}</span>
-              <h3>{r.title}</h3>
-              <p>{r.desc}</p>
-              <div className="resource-meta">
-                <span>{r.meta}</span>
-                <span>{r.date}</span>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-
-      {tab === "events" && (
-        <div className="events-list">
-          {events.length === 0 && (
-            <div className="events-empty">
-              <p>No upcoming events scheduled. Check back soon.</p>
-            </div>
-          )}
-          {events.map((ev) => {
-            const { month, day } = formatEventDate(ev.event_date);
-            const meta = [ev.event_time, ev.location].filter(Boolean).join(" · ");
-            return (
-              <div key={ev.id} className={`event-row ${ev.link ? "event-row-linked" : ""}`}>
-                <div className="event-date">
-                  <div className="event-month">{month}</div>
-                  <div className="event-day">{day}</div>
-                </div>
-                <div className="event-info">
-                  <h3>{ev.title}</h3>
-                  {(ev.description || meta) && (
-                    <p>{[meta, ev.description].filter(Boolean).join(" · ")}</p>
-                  )}
-                </div>
-                <div style={{ display: "flex", alignItems: "center", gap: 12, flexShrink: 0 }}>
-                  <span className="event-type">{ev.type}</span>
-                  {ev.link && (
-                    <a href={ev.link} target="_blank" rel="noopener noreferrer" className="btn btn-ghost" style={{ padding: "6px 16px", fontSize: "0.78rem" }}>
-                      RSVP →
-                    </a>
-                  )}
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      )}
+      <CalendarView events={events} />
     </div>
   );
 }

@@ -1026,6 +1026,154 @@ button { cursor: pointer; }
 
 .slack-banner:hover .slack-banner-arrow { transform: translateX(4px); }
 
+/* ── Calendar ────────────────────────────────────────────────────────────── */
+
+.calendar-wrap {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.calendar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--border);
+}
+
+.calendar-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.calendar-nav {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  width: 32px;
+  height: 32px;
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color var(--transition), color var(--transition);
+}
+.calendar-nav:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+}
+
+.calendar-day-name {
+  padding: 10px 0;
+  text-align: center;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  border-bottom: 1px solid var(--border);
+}
+
+.calendar-cell {
+  min-height: 90px;
+  padding: 8px;
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+.calendar-cell:nth-child(7n) { border-right: none; }
+
+.calendar-cell-empty {
+  background: var(--bg-primary);
+  opacity: 0.4;
+}
+
+.calendar-cell-num {
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--text-tertiary);
+  margin-bottom: 4px;
+}
+
+.calendar-cell-today .calendar-cell-num {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.calendar-event-pill {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: var(--accent);
+  color: var(--bg-primary);
+  border: none;
+  border-radius: 4px;
+  padding: 3px 6px;
+  font-size: 0.68rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: opacity var(--transition);
+}
+.calendar-event-pill:hover { opacity: 0.85; }
+
+.calendar-detail {
+  border-top: 1px solid var(--border);
+  padding: 24px;
+  background: var(--bg-primary);
+}
+
+.calendar-detail-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+
+.calendar-detail-header h3 {
+  margin: 0 0 6px;
+  font-size: 1rem;
+  color: var(--text-primary);
+}
+
+.calendar-detail-close {
+  background: none;
+  border: none;
+  font-size: 0.9rem;
+  color: var(--text-tertiary);
+  cursor: pointer;
+  padding: 2px 6px;
+  flex-shrink: 0;
+}
+.calendar-detail-close:hover { color: var(--text-primary); }
+
+.calendar-detail-meta {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+}
+
+.calendar-detail-desc {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin: 0 0 16px;
+}
+
 /* Tab count badge */
 .tab-count {
   display: inline-flex;

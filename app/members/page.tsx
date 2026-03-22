@@ -6,7 +6,6 @@ async function getEvents() {
   const { data } = await db
     .from("events")
     .select("*")
-    .gte("event_date", new Date().toISOString().split("T")[0])
     .order("event_date", { ascending: true });
   return data ?? [];
 }
