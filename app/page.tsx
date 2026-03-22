@@ -134,7 +134,7 @@ export default async function HomePage() {
           </h2>
           <div className="pain-list">
             {[
-              "You've sat through fourteen vendor briefings this quarter. Each one promises to be the operating system for your entire enterprise — and every deck has a slide titled "Single Source of Truth."",
+              "You\u2019ve sat through fourteen vendor briefings this quarter. Each one promises to be the operating system for your entire enterprise \u2014 and every deck has a slide titled \u201CSingle Source of Truth.\u201D",
               "The build-vs-buy calculus you ran two years ago is already outdated. AI-assisted development keeps rewriting what internal software costs, and nobody has updated the frameworks for making this call.",
               "ERP says it owns the master data. PLM says differently. Your data platform team wants a governance meeting. Meanwhile, production decisions are being made from a spreadsheet someone emailed last Thursday.",
               "Your board wants to know how you're deploying AI. You'd like to have that conversation honestly — without a vendor in the room framing the answer.",
