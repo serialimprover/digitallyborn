@@ -125,13 +125,41 @@ export default async function HomePage() {
 
       <div className="divider" />
 
+      {/* Pain Points */}
+      <Reveal>
+        <section className="pain-section" id="challenges">
+          <div className="section-label">Sound familiar?</div>
+          <h2 className="section-heading">
+            The conversations you can&apos;t have with a vendor in the room
+          </h2>
+          <div className="pain-list">
+            {[
+              "You\u2019ve sat through fourteen vendor briefings this quarter. Each one promises to be the operating system for your entire enterprise \u2014 and every deck has a slide titled \u201CSingle Source of Truth.\u201D",
+              "The build-vs-buy calculus you ran two years ago is already outdated. AI-assisted development keeps rewriting what internal software costs, and nobody has updated the frameworks for making this call.",
+              "ERP says it owns the master data. PLM says differently. Your data platform team wants a governance meeting. Meanwhile, production decisions are being made from a spreadsheet someone emailed last Thursday.",
+              "Your board wants to know how you're deploying AI. You'd like to have that conversation honestly — without a vendor in the room framing the answer.",
+              "There's a system running production across three facilities that nobody wants to touch. The vendor was acquired twice. The last engineer who understood it retired in 2019.",
+              "The digital transformation initiative was well-funded, well-marketed, and carefully piloted. It still failed. Not because of the technology — because change management was treated as a line item, not a strategy.",
+            ].map((text, i) => (
+              <div key={i} className="pain-item">
+                <span className="pain-tick">—</span>
+                <p>{text}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+      </Reveal>
+
+      <div className="divider" />
+
       {/* CTA */}
       <Reveal>
         <section className="cta-band">
-          <h2>Ready for conversations<br />that actually matter?</h2>
+          <h2>You&apos;ve earned a room<br />without a sales pitch in it.</h2>
           <p>
-            Applications are reviewed weekly. We&apos;re looking for active leaders who will
-            contribute as much as they gain.
+            A private community where manufacturing&apos;s senior technology leaders share what&apos;s
+            actually working, what isn&apos;t, and what to watch out for — no vendors, no agenda,
+            no performance.
           </p>
           <Link href="/apply" className="btn btn-accent">
             Apply for membership <ArrowRight />

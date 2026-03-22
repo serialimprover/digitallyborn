@@ -9,7 +9,14 @@
       "Bash(find /c/Users/cyril/Documents/digitally-born -type f \\\\\\(-name *migration* -o -name *schema* -o -name *.sql \\\\\\))",
       "Bash(npm list:*)",
       "Bash(npm run:*)",
-      "Bash(ls \"/c/Users/cyril/Documents/digitally-born/app/\\(site\\)\")"
+      "Bash(ls \"/c/Users/cyril/Documents/digitally-born/app/\\(site\\)\")",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(curl -s \"https://raw.githubusercontent.com/anthropics/skills/refs/heads/main/skills/frontend-design/SKILL.md\")",
+      "Bash(node -e \"const fs = require\\(''fs''\\); const text = fs.readFileSync\\(''app/page.tsx'', ''utf8''\\); const line = text.split\\(''\\\\n''\\)[136]; const match = line.match\\(/titled \\(.{1}\\)Single Source of Truth\\(.{1}\\)/\\); if\\(match\\) console.log\\(''before:'', match[1].charCodeAt\\(0\\), ''after:'', match[2].charCodeAt\\(0\\)\\);\")",
+      "Bash(python3 -c \":*)",
+      "mcp__Claude_Preview__preview_start",
+      "Bash(where npm)",
+      "Bash(where node)"
     ]
   }
 }
