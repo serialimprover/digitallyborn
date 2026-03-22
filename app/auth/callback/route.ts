@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createSupabaseServerClient } from "@/app/lib/supabase-server";
+import { createAdminClient } from "@/app/lib/supabase-admin";
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
@@ -34,7 +35,8 @@ export async function GET(request: NextRequest) {
     return NextResponse.redirect(new URL("/login?error=not_approved", request.url));
   }
 
-  const { data: approved } = await supabase
+  const adminClient = createAdminClient();
+  const { data: approved } = await adminClient
     .from("approved_members")
     .select("email")
     .eq("email", user.email)
