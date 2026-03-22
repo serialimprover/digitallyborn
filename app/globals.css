@@ -14,6 +14,7 @@
   --accent-dim: rgba(212, 160, 84, 0.12);
   --accent-hover: #E0B46E;
   --success: #5BA87A;
+  --error: #C45D5D;
   --font-display: 'Newsreader', Georgia, serif;
   --font-body: 'Outfit', -apple-system, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
@@ -205,6 +206,82 @@ button { cursor: pointer; }
   border-radius: 50%;
   display: inline-block;
 }
+
+/* ═══ MOBILE NAV ═══ */
+.nav-hamburger {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-secondary);
+  transition: border-color var(--transition), color var(--transition);
+  flex-shrink: 0;
+}
+
+.nav-hamburger:hover {
+  border-color: var(--text-secondary);
+  color: var(--text-primary);
+}
+
+.nav-mobile-backdrop {
+  position: fixed;
+  inset: 0;
+  top: 64px;
+  z-index: 998;
+}
+
+.nav-mobile-menu {
+  position: fixed;
+  top: 64px;
+  left: 0; right: 0;
+  z-index: 999;
+  background: var(--bg-primary);
+  border-bottom: 1px solid var(--border);
+  padding: 16px clamp(24px, 5vw, 64px) 28px;
+  display: flex;
+  flex-direction: column;
+  animation: slideDown 0.22s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.nav-mobile-link {
+  display: block;
+  padding: 14px 0;
+  font-size: 1.05rem;
+  font-weight: 400;
+  color: var(--text-secondary);
+  border-bottom: 1px solid var(--border-subtle);
+  transition: color var(--transition);
+  letter-spacing: 0.01em;
+}
+
+.nav-mobile-link:hover,
+.nav-mobile-link.active { color: var(--text-primary); }
+
+.nav-mobile-apply {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+  padding: 14px 28px;
+  border: 1px solid var(--accent);
+  border-radius: 100px;
+  color: var(--accent);
+  font-size: 0.9rem;
+  font-weight: 500;
+  background: none;
+  transition: background var(--transition);
+}
+
+.nav-mobile-apply:hover { background: var(--accent-dim); }
 
 /* ═══ HERO ═══ */
 .hero {
@@ -934,12 +1011,15 @@ button { cursor: pointer; }
 }
 
 .event-type {
-  padding: 6px 14px;
-  font-size: 0.72rem;
-  font-weight: 500;
-  letter-spacing: 0.04em;
-  color: var(--text-secondary);
-  border: 1px solid var(--border);
+  display: inline-block;
+  padding: 4px 12px;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: var(--accent-dim);
+  border: 1px solid rgba(212, 160, 84, 0.2);
   border-radius: 100px;
   white-space: nowrap;
 }
@@ -1005,6 +1085,7 @@ button { cursor: pointer; }
   max-width: 440px;
   background: var(--bg-card);
   border: 1px solid var(--border);
+  border-top: 2px solid var(--accent);
   border-radius: var(--radius-lg);
   padding: 48px;
 }
@@ -2041,6 +2122,33 @@ button { cursor: pointer; }
   to   { opacity: 1; transform: translateY(0); }
 }
 
+@keyframes successPop {
+  0%   { transform: scale(0.55); opacity: 0; }
+  65%  { transform: scale(1.12); }
+  100% { transform: scale(1);    opacity: 1; }
+}
+
+.success-icon,
+.login-success-icon {
+  animation: successPop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s both;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.spinner {
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  border: 2px solid rgba(14, 15, 17, 0.25);
+  border-top-color: var(--bg-primary);
+  border-radius: 50%;
+  animation: spin 0.65s linear infinite;
+  flex-shrink: 0;
+}
+
 /* ═══ RESPONSIVE ═══ */
 @media (max-width: 1100px) {
   .hero { grid-template-columns: 1fr; gap: 48px; }
@@ -2057,8 +2165,12 @@ button { cursor: pointer; }
   .principle:last-child { border-bottom: none; }
 }
 
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  .nav-hamburger { display: inline-flex; }
+}
+
 @media (max-width: 640px) {
-  .nav-links a:not(.nav-apply), .nav-links button:not(.nav-apply) { display: none; }
   .hero-stats { flex-direction: column; gap: 24px; }
   .form-row { grid-template-columns: 1fr; }
   .event-row { flex-direction: column; align-items: flex-start; gap: 16px; }
