@@ -5,11 +5,11 @@ export default function Footer() {
     <footer className="footer">
       <div className="footer-brand">
         <div className="footer-mark">DB</div>
-        <p className="footer-tagline">An invite-only community for technology leaders in hardware engineering and manufacturing.</p>
+        <p className="footer-tagline">A private community for technology leaders at modern hardware and manufacturing companies.</p>
         <div className="footer-nots">
           <span>No vendors</span>
+          <span>No implementation partners</span>
           <span>No pitches</span>
-          <span>No consultants</span>
         </div>
       </div>
       <div className="footer-right">

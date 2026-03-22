@@ -111,7 +111,7 @@ export default function ApplyPage() {
             <div className="form-section-label">Your role</div>
             <div className="form-group">
               <label className="form-label">Job title <span className="required">*</span></label>
-              <input className="form-input" name="job_title" type="text" required placeholder="VP of Digital, CIO, Director of IT..." />
+              <input className="form-input" name="job_title" type="text" required placeholder="CIO, VP of Technology, Head of Engineering Systems..." />
             </div>
             <div className="form-group">
               <label className="form-label">Company <span className="required">*</span></label>
@@ -155,7 +155,7 @@ export default function ApplyPage() {
                 className="form-input textarea"
                 name="challenge"
                 required
-                placeholder="E.g., We're migrating from on-prem PLM to cloud and struggling with change management across 12 sites..."
+                placeholder="E.g., Our ERP and PLM each claim to own the same data and we can't get them to agree. We're also being pitched by every major platform and can't tell who to trust..."
               />
             </div>
             <div className="form-group">
@@ -163,7 +163,7 @@ export default function ApplyPage() {
               <textarea
                 className="form-input textarea"
                 name="hopes"
-                placeholder="E.g., Honest reviews of ERP platforms from peers who've actually implemented them..."
+                placeholder="E.g., Unbiased takes on which platforms are actually worth it from peers who've been through the same evaluation — without a vendor in the room..."
               />
             </div>
             <div className="form-group">
