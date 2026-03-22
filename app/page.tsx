@@ -1,5 +1,8 @@
 import Link from "next/link";
 import Reveal from "./components/Reveal";
+import { createClient } from "@supabase/supabase-js";
+
+export const dynamic = "force-dynamic";
 
 function ArrowRight() {
   return (
@@ -9,7 +12,27 @@ function ArrowRight() {
   );
 }
 
-export default function HomePage() {
+async function getMemberStats() {
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+  const db = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, key, {
+    auth: { persistSession: false },
+  });
+
+  const { data } = await db.from("approved_members").select("email, company");
+
+  if (!data || data.length === 0) return { memberCount: 0, companyCount: 0 };
+
+  const memberCount = data.length;
+  const companyCount = new Set(
+    data.map((m: { company?: string }) => m.company?.trim().toLowerCase()).filter(Boolean)
+  ).size;
+
+  return { memberCount, companyCount };
+}
+
+export default async function HomePage() {
+  const { memberCount, companyCount } = await getMemberStats();
+
   return (
     <div>
       {/* Hero */}
@@ -36,11 +59,11 @@ export default function HomePage() {
         </div>
         <div className="hero-stats">
           <div>
-            <div className="stat-value">140+</div>
+            <div className="stat-value">{memberCount}</div>
             <div className="stat-label">Vetted members</div>
           </div>
           <div>
-            <div className="stat-value">68</div>
+            <div className="stat-value">{companyCount}</div>
             <div className="stat-label">Companies represented</div>
           </div>
           <div>
