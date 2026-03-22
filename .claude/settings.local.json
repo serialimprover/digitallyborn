@@ -9,7 +9,9 @@
       "Bash(find /c/Users/cyril/Documents/digitally-born -type f \\\\\\(-name *migration* -o -name *schema* -o -name *.sql \\\\\\))",
       "Bash(npm list:*)",
       "Bash(npm run:*)",
-      "Bash(ls \"/c/Users/cyril/Documents/digitally-born/app/\\(site\\)\")"
+      "Bash(ls \"/c/Users/cyril/Documents/digitally-born/app/\\(site\\)\")",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(curl -s \"https://raw.githubusercontent.com/anthropics/skills/refs/heads/main/skills/frontend-design/SKILL.md\")"
     ]
   }
 }
