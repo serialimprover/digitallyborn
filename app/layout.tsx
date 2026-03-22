@@ -6,11 +6,11 @@ import FooterWrapper from "./components/FooterWrapper";
 export const metadata: Metadata = {
   title: "Digitally Born — A Private Community for Manufacturing Tech Leaders",
   description:
-    "An invite-only community for CIOs, VPs of Digital, and technology executives at hardware engineering and manufacturing companies. No vendors. No sales pitches.",
+    "An invite-only community for CIOs, VPs of Technology, and engineering systems leaders at hardware and manufacturing companies built over the last two decades. No vendors. No implementation partners.",
   openGraph: {
     title: "Digitally Born — A Private Community for Manufacturing Tech Leaders",
     description:
-      "An invite-only community for CIOs, VPs of Digital, and technology executives at hardware engineering and manufacturing companies. No vendors. No sales pitches.",
+      "An invite-only community for CIOs, VPs of Technology, and engineering systems leaders at hardware and manufacturing companies built over the last two decades. No vendors. No implementation partners.",
     siteName: "Digitally Born",
     type: "website",
   },
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Digitally Born — A Private Community for Manufacturing Tech Leaders",
     description:
-      "An invite-only community for CIOs and technology executives at manufacturing companies. No vendors. No sales pitches.",
+      "An invite-only community for technology leaders at modern manufacturing companies. No vendors. No implementation partners. Just honest conversations about which platforms actually work.",
   },
 };
 

@@ -89,9 +89,10 @@ export default async function HomePage() {
             Where manufacturing&apos;s <em>tech leaders</em> speak freely
           </h1>
           <p className="hero-desc">
-            Digitally Born is an invite-only community for CIOs, VPs of Digital, and technology
-            executives at hardware engineering and manufacturing companies. No vendors. No sales pitches.
-            Just honest conversations with the people who understand your challenges.
+            Digitally Born is an invite-only community for CIOs, VPs of Technology, and engineering
+            systems leaders at hardware and manufacturing companies built over the last two decades.
+            No vendors. No implementation partners. Just honest conversations about which platforms
+            actually work — with people who&apos;ve made the same calls.
           </p>
           <div className="hero-actions">
             <Link href="/apply" className="btn btn-accent">
@@ -118,23 +119,24 @@ export default async function HomePage() {
           <div className="hero-quote-card">
             <span className="hero-quote-marks">&ldquo;</span>
             <p className="hero-quote-text">
-              First time in years I&apos;ve spoken honestly about a failed implementation.
-              No one was trying to sell me a fix. This community actually gets it.
+              Finally had an honest conversation about platform selection without someone
+              trying to upsell me. These are the only people who&apos;ve dealt with the
+              same complexity at the same scale.
             </p>
             <div className="hero-quote-author">
-              <span className="hero-quote-role">VP of Digital Transformation</span>
+              <span className="hero-quote-role">Head of Technology</span>
               <span className="hero-quote-sep">·</span>
-              <span className="hero-quote-company">Tier 1 automotive supplier</span>
+              <span className="hero-quote-company">Precision manufacturer, Series C</span>
             </div>
           </div>
           <div className="hero-topics">
             <div className="hero-topics-label">Recent discussions</div>
             <div className="hero-topic-chips">
-              <span>ERP migration without downtime</span>
-              <span>OT/IT network convergence</span>
-              <span>Digital twin ROI justification</span>
-              <span>Engineering talent retention</span>
-              <span>Legacy PLM modernisation</span>
+              <span>Platform consolidation vs. best-of-breed</span>
+              <span>When ERP and PLM both own master data</span>
+              <span>Evaluating ERPs without getting locked in</span>
+              <span>AI tools vs. what&apos;s on the shop floor</span>
+              <span>Making sense of system integration</span>
             </div>
           </div>
         </div>
@@ -147,14 +149,14 @@ export default async function HomePage() {
         <section className="section" id="about">
           <div className="section-label">Who this is for</div>
           <h2 className="section-heading">
-            Built for the people leading digital transformation in the physical world
+            Built for the technology leaders of modern manufacturing companies
           </h2>
           <div className="audience-grid">
             {[
-              [<IconCIO key="cio" />, "Chief Information Officers", "Setting the technology vision for manufacturing organizations and managing the tension between legacy infrastructure and modern platforms."],
-              [<IconVP key="vp" />, "VPs of Digital & IT", "Leading digital transformation initiatives, evaluating platforms, and building the teams that connect software to shop floors."],
-              [<IconDirector key="dir" />, "Directors of Engineering Systems", "Owning PLM, ERP, MES, and the integration layer that keeps engineering and manufacturing in sync."],
-              [<IconStrategy key="strat" />, "Heads of Digital Strategy", "Charting the roadmap for Industry 4.0 adoption, IoT integration, and data-driven manufacturing operations."],
+              [<IconCIO key="cio" />, "Chief Information Officers", "Owning the technology vision for a company that's always been digital — managing the sprawl of platforms that came with scaling fast, and deciding what to consolidate and what to leave alone."],
+              [<IconVP key="vp" />, "VPs of Technology & IT", "Evaluating platforms, avoiding vendor lock-in, and building a coherent stack from a decade of tools your teams adopted to solve immediate problems — while every major enterprise platform claims it can do it all."],
+              [<IconDirector key="dir" />, "Directors of Engineering Systems", "Owning the integration layer between systems that were each bought to solve one problem and now each claim to be the system of record — PLM, ERP, MES, and the spreadsheets filling the gaps between them."],
+              [<IconStrategy key="strat" />, "Heads of Digital Strategy", "Figuring out what your technology roadmap should actually look like when every conference pitches a different vision of the future and every vendor's deck starts with the same slide."],
             ].map(([icon, title, desc]) => (
               <div key={title as string} className="audience-card">
                 <div className="audience-icon">{icon}</div>
@@ -206,9 +208,9 @@ export default async function HomePage() {
               "You\u2019ve sat through fourteen vendor briefings this quarter. Each one promises to be the operating system for your entire enterprise \u2014 and every deck has a slide titled \u201CSingle Source of Truth.\u201D",
               "The build-vs-buy calculus you ran two years ago is already outdated. AI-assisted development keeps rewriting what internal software costs, and nobody has updated the frameworks for making this call.",
               "ERP says it owns the master data. PLM says differently. Your data platform team wants a governance meeting. Meanwhile, production decisions are being made from a spreadsheet someone emailed last Thursday.",
-              "Your board wants to know how you're deploying AI. You'd like to have that conversation honestly — without a vendor in the room framing the answer.",
-              "There's a system running production across three facilities that nobody wants to touch. The vendor was acquired twice. The last engineer who understood it retired in 2019.",
-              "The digital transformation initiative was well-funded, well-marketed, and carefully piloted. It still failed. Not because of the technology — because change management was treated as a line item, not a strategy.",
+              "Your board wants to know how you\u2019re deploying AI. You\u2019d like to have that conversation honestly \u2014 without a vendor in the room framing the answer.",
+              "You didn\u2019t inherit a broken stack \u2014 you chose every system you have. Which somehow makes it harder to explain why three of them are supposed to share the same data but never actually do.",
+              "The implementation partner helping you roll out the new platform is also a certified reseller of that platform. You found out how that shapes their advice after the contract was signed.",
             ].map((text, i) => (
               <div key={i} className="pain-item">
                 <span className="pain-tick">—</span>
@@ -226,9 +228,9 @@ export default async function HomePage() {
         <section className="cta-band">
           <h2>You&apos;ve earned a room<br />without a sales pitch in it.</h2>
           <p>
-            A private community where manufacturing&apos;s senior technology leaders share what&apos;s
-            actually working, what isn&apos;t, and what to watch out for — no vendors, no agenda,
-            no performance.
+            A private community where manufacturing&apos;s technology leaders share which platforms
+            are actually worth it, which vendors to avoid, and what they wish they&apos;d known
+            before signing — no vendors, no implementation partners, no agenda.
           </p>
           <Link href="/apply" className="btn btn-accent">
             Apply for membership <ArrowRight />
