@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 
@@ -29,9 +28,7 @@ export default function Nav() {
     <>
       <nav className="nav">
         <Link href="/" className="nav-brand" onClick={() => setOpen(false)}>
-          <div className="nav-logo-wrap">
-            <Image src="/logo.png" alt="Digitally Born" width={36} height={36} className="nav-logo" priority />
-          </div>
+          <div className="nav-mark">DB</div>
           <span className="nav-name">Digitally Born</span>
         </Link>
         <div className="nav-links">
