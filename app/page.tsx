@@ -58,7 +58,8 @@ async function getMemberStats() {
     auth: { persistSession: false },
   });
 
-  const { data } = await db.from("approved_members").select("email, company");
+  // Select only company — no PII (email) loaded into memory
+  const { data } = await db.from("approved_members").select("company");
 
   if (!data || data.length === 0) return { memberCount: 0, companyCount: 0 };
 

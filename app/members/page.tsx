@@ -1,3 +1,4 @@
+import { redirect } from "next/navigation";
 import { createAdminClient } from "@/app/lib/supabase-admin";
 import { createSupabaseServerClient } from "@/app/lib/supabase-server";
 import MembersShell from "./MembersShell";
@@ -13,9 +14,12 @@ export default async function MembersPage() {
     supabase.auth.getUser(),
   ]);
 
-  const { data: rsvps } = user?.email
-    ? await db.from("event_rsvps").select("event_id").eq("member_email", user.email)
-    : { data: [] };
+  if (!user) redirect("/login");
+
+  const { data: rsvps } = await db
+    .from("event_rsvps")
+    .select("event_id")
+    .eq("member_email", user.email);
 
   const rsvpedIds = new Set((rsvps ?? []).map((r) => r.event_id));
 

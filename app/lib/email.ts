@@ -4,6 +4,19 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 const FROM = "Digitally Born <noreply@digitallyborn.io>";
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://www.digitallyborn.io";
 
+// ── HTML escaping ─────────────────────────────────────────────────────────────
+// Prevents user-supplied content from injecting HTML into email templates.
+
+function esc(value: string | null | undefined): string {
+  if (!value) return "";
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
 // ── Shared layout ────────────────────────────────────────────────────────────
 
 function layout(body: string) {
@@ -74,20 +87,20 @@ export async function sendNewApplicationEmail(
 
   const html = layout(`
     <h1>New membership application</h1>
-    <p><strong>${app.first_name} ${app.last_name}</strong> has applied to join Digitally Born.</p>
+    <p><strong>${esc(app.first_name)} ${esc(app.last_name)}</strong> has applied to join Digitally Born.</p>
     <div class="divider"></div>
     <div class="field-label">Name</div>
-    <div class="field-value">${app.first_name} ${app.last_name}</div>
+    <div class="field-value">${esc(app.first_name)} ${esc(app.last_name)}</div>
     <div class="field-label">Email</div>
-    <div class="field-value">${app.email}</div>
+    <div class="field-value">${esc(app.email)}</div>
     <div class="field-label">Role</div>
-    <div class="field-value">${app.job_title} at ${app.company}</div>
+    <div class="field-value">${esc(app.job_title)} at ${esc(app.company)}</div>
     <div class="field-label">Industry</div>
-    <div class="field-value">${app.industry} · ${app.company_size} employees</div>
+    <div class="field-value">${esc(app.industry)} · ${esc(app.company_size)} employees</div>
     <div class="field-label">Biggest challenge</div>
-    <div class="field-value">${app.challenge}</div>
-    ${app.hopes ? `<div class="field-label">Hopes from community</div><div class="field-value">${app.hopes}</div>` : ""}
-    ${app.referral_source ? `<div class="field-label">Referred by</div><div class="field-value">${app.referral_source}</div>` : ""}
+    <div class="field-value">${esc(app.challenge)}</div>
+    ${app.hopes ? `<div class="field-label">Hopes from community</div><div class="field-value">${esc(app.hopes)}</div>` : ""}
+    ${app.referral_source ? `<div class="field-label">Referred by</div><div class="field-value">${esc(app.referral_source)}</div>` : ""}
     <div class="divider"></div>
     <a href="${reviewUrl}" class="btn">Review application →</a>
   `);
@@ -106,7 +119,7 @@ export async function sendNewApplicationEmail(
 
 export async function sendApprovalEmail(email: string, firstName: string) {
   const html = layout(`
-    <h1>Welcome to Digitally Born, ${firstName}</h1>
+    <h1>Welcome to Digitally Born, ${esc(firstName)}</h1>
     <p>Your application has been reviewed and approved. You're now a member of Digitally Born — a private community for technology executives in hardware engineering and manufacturing.</p>
     <p>Sign in to access the member hub, including upcoming events, peer resources, and the Slack community.</p>
     <a href="${SITE_URL}/login" class="btn">Sign in to the member hub →</a>
@@ -127,7 +140,7 @@ export async function sendApprovalEmail(email: string, firstName: string) {
 export async function sendRejectionEmail(email: string, firstName: string) {
   const html = layout(`
     <h1>Your Digitally Born application</h1>
-    <p>Hi ${firstName},</p>
+    <p>Hi ${esc(firstName)},</p>
     <p>Thank you for your interest in Digitally Born. After reviewing your application, we're not able to offer membership at this time.</p>
     <p>Our community is focused specifically on technology executives at hardware engineering and manufacturing companies, and we keep membership selective to maintain the quality of discussion.</p>
     <p>We appreciate you taking the time to apply and wish you well.</p>
@@ -167,16 +180,16 @@ export async function sendNewEventEmail(event: EventPayload, memberEmails: strin
   const meta = [event.event_time, event.location].filter(Boolean).join(" · ");
 
   const html = layout(`
-    <h1>New event: ${event.title}</h1>
+    <h1>New event: ${esc(event.title)}</h1>
     <div class="field-label">Date</div>
-    <div class="field-value">${dateStr}</div>
-    ${meta ? `<div class="field-label">When &amp; where</div><div class="field-value">${meta}</div>` : ""}
+    <div class="field-value">${esc(dateStr)}</div>
+    ${meta ? `<div class="field-label">When &amp; where</div><div class="field-value">${esc(meta)}</div>` : ""}
     <div class="field-label">Format</div>
-    <div class="field-value">${event.type}</div>
-    ${event.description ? `<div class="divider"></div><p>${event.description}</p>` : ""}
+    <div class="field-value">${esc(event.type)}</div>
+    ${event.description ? `<div class="divider"></div><p>${esc(event.description)}</p>` : ""}
     <div class="divider"></div>
     ${event.link
-      ? `<a href="${event.link}" class="btn">RSVP →</a>`
+      ? `<a href="${esc(event.link)}" class="btn">RSVP →</a>`
       : `<a href="${SITE_URL}/members" class="btn">View in member hub →</a>`}
   `);
 

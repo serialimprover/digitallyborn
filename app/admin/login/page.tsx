@@ -4,6 +4,14 @@ import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { createBrowserClient } from "@supabase/ssr";
 
+function CheckIcon() {
+  return (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M5 13l4 4L19 7" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
 function AdminLoginForm() {
   const searchParams = useSearchParams();
   const [email, setEmail] = useState("");
@@ -33,7 +41,7 @@ function AdminLoginForm() {
     const { error: signInError } = await supabase.auth.signInWithOtp({
       email,
       options: {
-        shouldCreateUser: true,
+        shouldCreateUser: false,
         emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/admin/auth/callback`,
       },
     });
@@ -58,7 +66,7 @@ function AdminLoginForm() {
 
         {submitted ? (
           <div className="login-success">
-            <div className="login-success-icon">✓</div>
+            <div className="login-success-icon"><CheckIcon /></div>
             <h2>Check your inbox</h2>
             <p>
               We sent a sign-in link to <strong>{email}</strong>.
