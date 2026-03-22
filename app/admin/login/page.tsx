@@ -2,7 +2,7 @@
 
 import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
-import { createBrowserClient } from "@supabase/ssr";
+import { requestAdminSignIn } from "./actions";
 
 function CheckIcon() {
   return (
@@ -28,27 +28,16 @@ function AdminLoginForm() {
     }
   }, [searchParams]);
 
-  const supabase = createBrowserClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  );
-
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
     setError("");
 
-    const { error: signInError } = await supabase.auth.signInWithOtp({
-      email,
-      options: {
-        shouldCreateUser: false,
-        emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/admin/auth/callback`,
-      },
-    });
+    const result = await requestAdminSignIn(email);
 
     setLoading(false);
 
-    if (signInError) {
+    if (!result.success) {
       setError("Something went wrong. Please try again.");
     } else {
       setSubmitted(true);
