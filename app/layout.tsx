@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import Nav from "./components/Nav";
-import Footer from "./components/Footer";
+import NavWrapper from "./components/NavWrapper";
+import FooterWrapper from "./components/FooterWrapper";
 
 export const metadata: Metadata = {
   title: "Digitally Born — A Private Community for Manufacturing Tech Leaders",
@@ -30,9 +30,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <Nav />
+        <NavWrapper />
         {children}
-        <Footer />
+        <FooterWrapper />
       </body>
     </html>
   );
