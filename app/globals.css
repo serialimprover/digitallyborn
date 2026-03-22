@@ -628,6 +628,51 @@ button { cursor: pointer; }
   color: var(--text-secondary);
 }
 
+/* ═══ PAIN POINTS ═══ */
+.pain-section {
+  padding: 100px clamp(24px, 8vw, 120px);
+}
+
+.pain-list {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.pain-item {
+  padding: 28px 40px;
+  border-bottom: 1px solid var(--border-subtle);
+  background: var(--bg-secondary);
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  transition: background var(--transition);
+}
+
+.pain-item:last-child { border-bottom: none; }
+.pain-item:hover { background: var(--bg-tertiary); }
+
+.pain-tick {
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  flex-shrink: 0;
+  margin-top: 7px;
+  opacity: 0.6;
+  letter-spacing: 0.05em;
+}
+
+.pain-item p {
+  font-family: var(--font-display);
+  font-size: clamp(0.95rem, 1.6vw, 1.1rem);
+  font-weight: 400;
+  line-height: 1.55;
+  color: var(--text-primary);
+  font-style: italic;
+}
+
 /* ═══ CTA ═══ */
 .cta-band {
   text-align: center;
