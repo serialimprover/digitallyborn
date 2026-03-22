@@ -12,6 +12,7 @@ export default function Nav() {
       <div className="nav-links">
         <Link href="/#about" className="nav-link">About</Link>
         <Link href="/#principles" className="nav-link">Principles</Link>
+        <Link href="/login" className="nav-link">Member login</Link>
         <Link href="/apply" className="nav-apply">Apply to join</Link>
       </div>
     </nav>
