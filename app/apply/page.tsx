@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { supabase } from "../lib/supabase";
+import { submitApplication } from "./actions";
 
 export default function ApplyPage() {
   const [submitted, setSubmitted] = useState(false);
@@ -16,27 +16,25 @@ export default function ApplyPage() {
     const form = e.currentTarget;
     const formData = new FormData(form);
 
-    const { error: dbError } = await supabase.from("applications").insert({
-      first_name: formData.get("first_name"),
-      last_name: formData.get("last_name"),
-      email: formData.get("email"),
-      linkedin: formData.get("linkedin") || null,
-      job_title: formData.get("job_title"),
-      company: formData.get("company"),
-      industry: formData.get("industry"),
-      company_size: formData.get("company_size"),
-      challenge: formData.get("challenge"),
-      hopes: formData.get("hopes") || null,
-      referral_source: formData.get("referral_source") || null,
-    });
-
-    setSubmitting(false);
-
-    if (dbError) {
-      setError("Something went wrong. Please try again.");
-      console.error(dbError);
-    } else {
+    try {
+      await submitApplication({
+        first_name: formData.get("first_name") as string,
+        last_name: formData.get("last_name") as string,
+        email: formData.get("email") as string,
+        linkedin: formData.get("linkedin") as string,
+        job_title: formData.get("job_title") as string,
+        company: formData.get("company") as string,
+        industry: formData.get("industry") as string,
+        company_size: formData.get("company_size") as string,
+        challenge: formData.get("challenge") as string,
+        hopes: formData.get("hopes") as string,
+        referral_source: formData.get("referral_source") as string,
+      });
       setSubmitted(true);
+    } catch {
+      setError("Something went wrong. Please try again.");
+    } finally {
+      setSubmitting(false);
     }
   };
 

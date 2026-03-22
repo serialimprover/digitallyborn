@@ -3,6 +3,11 @@
 import { revalidatePath } from "next/cache";
 import { createAdminClient } from "@/app/lib/supabase-admin";
 import { createSupabaseServerClient } from "@/app/lib/supabase-server";
+import {
+  sendApprovalEmail,
+  sendRejectionEmail,
+  sendNewEventEmail,
+} from "@/app/lib/email";
 
 async function requireAdmin() {
   const supabase = await createSupabaseServerClient();
@@ -57,6 +62,11 @@ export async function approveApplication(id: string) {
 
   if (memberError) throw memberError;
 
+  // Notify the applicant — fire and forget
+  sendApprovalEmail(app.email, app.first_name).catch((err) =>
+    console.error("Failed to send approval email:", err)
+  );
+
   revalidatePath("/admin/applications");
   revalidatePath(`/admin/applications/${id}`);
   revalidatePath("/admin/members");
@@ -65,6 +75,12 @@ export async function approveApplication(id: string) {
 
 export async function rejectApplication(id: string, notes?: string) {
   const db = await requireAdmin();
+
+  const { data: app } = await db
+    .from("applications")
+    .select("email, first_name")
+    .eq("id", id)
+    .single();
 
   const { error } = await db
     .from("applications")
@@ -76,6 +92,12 @@ export async function rejectApplication(id: string, notes?: string) {
     .eq("id", id);
 
   if (error) throw error;
+
+  if (app) {
+    sendRejectionEmail(app.email, app.first_name).catch((err) =>
+      console.error("Failed to send rejection email:", err)
+    );
+  }
 
   revalidatePath("/admin/applications");
   revalidatePath(`/admin/applications/${id}`);
@@ -189,6 +211,17 @@ export async function createEvent(data: EventData) {
   });
 
   if (error) throw error;
+
+  // Email all active members — fire and forget
+  db.from("approved_members")
+    .select("email")
+    .eq("status", "active")
+    .then(({ data: members }) => {
+      const emails = members?.map((m) => m.email) ?? [];
+      sendNewEventEmail(data, emails).catch((err) =>
+        console.error("Failed to send new event emails:", err)
+      );
+    });
 
   revalidatePath("/admin/events");
   revalidatePath("/members");
